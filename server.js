@@ -50,6 +50,16 @@ connect().then(db => {
     }
   });
 
+  // insert data elements questionnaires
+  app.post('/api/element', async (req, res) => {
+    try {
+      const elements = req.body;
+      const result = await db.collection('Elements').insertMany(elements);
+      res.json(result);
+    } catch (error) {
+      res.status(500).send(error.toString());
+    }
+  });
 
   // Start the server
   const PORT = process.env.PORT || 3000;
