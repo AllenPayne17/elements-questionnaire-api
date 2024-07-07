@@ -5,6 +5,12 @@ const app = express();
 app.use(express.json());
 
 connect().then(db => {
+
+  // test display in browser
+  app.get('/', (req, res) => {
+    res.send('Hello World!');
+  });
+  
   // Example: Define a GET route that fetches data from a collection
   app.get('/api/data', async (req, res) => {
     try {
