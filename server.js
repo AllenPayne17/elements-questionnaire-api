@@ -10,18 +10,9 @@ connect().then(db => {
   app.get('/', (req, res) => {
     res.send('Hello World!');
   });
-  
-  // Example: Define a GET route that fetches data from a collection
-  app.get('/api/data', async (req, res) => {
-    try {
-      const data = await db.collection('myCollection').find({}).toArray(); // Replace 'myCollection' with your collection name
-      res.json(data);
-    } catch (error) {
-      res.status(500).send(error.toString());
-    }
-  });
 
-  // get all elements
+
+  // get all data elements questionnaires
   app.get('/api/elements', async (req, res) => {
     try {
       const elements = await db.collection('Elements').find({}).toArray();
@@ -32,19 +23,33 @@ connect().then(db => {
   });
 
 
-  app.get('/api/element/:symbol', async (req, res) => {
+  // get a 10 random element questionnaire by symbol for example /api/element/random/10/Fe
+  app.get('/api/element/random/:count/:symbol', async (req, res) => {
     try {
-      const symbol = req.params.symbol; // Corrected from req.params.element to req.params.symbol
-      const element = await db.collection('Elements').findOne({ symbol: symbol }); // Assuming your elements are stored in 'myCollection'
-      if (element) {
-        res.json(element);
-      } else {
-        res.status(404).send('Element not found');
-      }
+      const { count, symbol } = req.params;
+      const elements = await db.collection('Elements').aggregate([
+        { $match: { symbol: symbol } },
+        { $unwind: '$questionnaire' },
+        { $sample: { size: parseInt(count) } },
+        { $group: { _id: '$_id', questionnaire: { $push: '$questionnaire' } } },
+      ]).toArray();
+      res.json(elements);
     } catch (error) {
       res.status(500).send(error.toString());
     }
   });
+
+  // get all data elements questionnaires by symbol for example /api/element/Fe
+  app.get('/api/element/:symbol', async (req, res) => {
+    try {
+      const { symbol } = req.params;
+      const elements = await db.collection('Elements').find({ symbol: symbol }).toArray();
+      res.json(elements);
+    } catch (error) {
+      res.status(500).send(error.toString());
+    }
+  });
+
 
   // Start the server
   const PORT = process.env.PORT || 3000;

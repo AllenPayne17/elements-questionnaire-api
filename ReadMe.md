@@ -1,61 +1,59 @@
-# Periodic Table Elements API
+# Elements API
 
 ## Overview
 
-This API provides access to information about the elements in the periodic table. It allows users to query elements by their symbol, name, atomic number, and other properties. The API is designed for educational purposes, providing a simple interface for retrieving detailed information about each element.
-
-## Features
-
-- **Retrieve Element Details:** Get detailed information about an element, including its name, symbol, atomic number, atomic mass, and more.
-- **Search by Symbol or Name:** Users can search for elements using either their symbol or name.
-- **List All Elements:** Provides a list of all elements in the periodic table, with the option to retrieve detailed information for each.
+The Elements API is a RESTful service built with Node.js and Express, designed to provide access to a database of chemical elements. It supports operations to retrieve all elements, fetch elements by their symbol, and get a random set of questions related to a specific element.
 
 ## Getting Started
 
-To start using the Periodic Table Elements API, follow these steps:
+### Prerequisites
 
-1. **Clone the Repository:**
+- Node.js
+- npm (Node Package Manager)
+- MongoDB
 
-```bash
-git clone https://github.com/yourusername/periodic-table-elements-api.git
-```
+### Installation
 
-2. **Install Dependencies**
-Navigate to the cloned repository's directory and run:
+1. Clone the repository to your local machine.
+2. Navigate to the cloned directory and run `npm install` to install the required dependencies.
+3. Ensure MongoDB is running on your local machine or configure the application to connect to your MongoDB instance.
+4. Start the server with `npm start`.
 
-```bash
-yarn install
-```
+## API Endpoints
 
-3. **Set Up Environment Variables:**
-Create a .env file in the root directory and add your MongoDB connection string:
+### `GET /`
 
-```
-MONGODB_URI=your_mongodb_connection_string
-```
+- Description: Test endpoint to verify that the API is running.
+- Response: `Hello World!`
 
-4. **Start the Server:**
-The API server will start running on http://localhost:3000.
+### `GET /api/elements`
 
-API Endpoints
-- GET /api/element/:symbol - Retrieve information about an element by its symbol.
-- GET /api/elements - List all elements in the periodic table.
+- Description: Retrieves all elements from the database.
+- Response: JSON array of elements.
 
-Examples
-- Retrieve Element by Symbol:
+### `GET /api/element/:symbol`
 
-```
-GET /api/element/H
-```
+- Description: Fetches a single element by its chemical symbol.
+- Parameters:
+  - `symbol`: The chemical symbol of the element (e.g., `Fe` for iron).
+- Response: JSON object of the element.
 
-- List All Elements:
+### `GET /api/element/random/:count/:symbol`
 
-```
-GET /api/elements
-```
+- Description: Retrieves a random set of questionnaire items for a given element.
+- Parameters:
+  - `count`: Number of random questions to retrieve.
+  - `symbol`: The chemical symbol of the element.
+- Response: JSON array of questionnaire items.
 
-Contributing
-Contributions to the Periodic Table Elements API are welcome. Please feel free to fork the repository, make your changes, and submit a pull request.
+## Environment Variables
 
-License
-This project is licensed under the MIT License - see the LICENSE.md file for details.
+- `PORT`: The port number on which the server will listen (default is 3000).
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request with your changes.
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
